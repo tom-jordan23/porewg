@@ -1,5 +1,34 @@
 @startuml
-title OIDC Federation for Higher Education - InCommon Example
+' Set dark theme
+skinparam backgroundColor #1e1e1e
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam component {
+  backgroundColor #2e2e2e
+  borderColor white
+  fontColor white
+}
+skinparam package {
+  backgroundColor #2e2e2e
+  borderColor white
+  fontColor white
+}
+skinparam interface {
+  backgroundColor #2e2e2e
+  borderColor white
+  fontColor white
+}
+skinparam noteBackgroundColor #333333
+skinparam noteBorderColor white
+skinparam noteFontColor white
+skinparam arrowColor white
+skinparam arrowFontColor white
+skinparam defaultTextAlignment center
+skinparam FrameFontColor White
+skinparam TitleFontColor White
+skinparam TitleFontSize 18
+title OIDC Federation for Higher Education - Class Diagram
+
 
 ' Federation Operator and Trust Anchor
 frame "InCommon Federation Operator" {

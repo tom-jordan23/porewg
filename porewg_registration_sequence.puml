@@ -1,0 +1,41 @@
+@startuml
+' Dark theme
+skinparam backgroundColor #1e1e1e
+skinparam participant {
+  BackgroundColor #2e2e2e
+  BorderColor White
+  FontColor White
+}
+skinparam ArrowColor White
+skinparam ArrowFontColor White
+skinparam SequenceLifeLineBorderColor White
+
+
+participant "University of Wisconsin\n(Intermediary)" as UW
+participant "Federation Operator\n(InCommon)" as InCommon
+participant "UW NetID Login\n(OP)" as OP
+participant "Canvas LMS / O365\n(RPs)" as RP
+participant "User" as User
+
+== OP Registration ==
+
+UW -> InCommon : Submit OP metadata
+InCommon -> InCommon : Issue Entity Statement for OP
+InCommon -> UW : Return signed Entity Statement
+
+== RP Registration ==
+
+UW -> OP : Submit RP metadata for Canvas and O365
+OP -> OP : Accept and store RP registrations
+OP -> UW : Confirm registration
+
+== OIDC Login ==
+
+User -> RP : Access protected resource
+RP -> OP : Redirect to /authorize
+User -> OP : Authenticate with NetID
+OP -> RP : Return ID Token + Access Token
+RP -> RP : Validate ID Token
+RP -> User : Grant access
+
+@enduml

@@ -1,0 +1,53 @@
+@startuml
+' Dark theme
+skinparam backgroundColor #1e1e1e
+skinparam activity {
+  BackgroundColor #2e2e2e
+  BorderColor White
+  FontColor White
+}
+skinparam ArrowColor White
+skinparam PartitionBorderColor White
+skinparam PartitionFontColor White
+skinparam TitleFontColor White
+skinparam TitleFontSize 18
+title OIDC Federation for Higher Education - Activity Diagram
+
+start
+
+partition "Federation Operator (InCommon)" {
+  :Receive OP metadata from UW;
+  :Issue Entity Statement for OP;
+  :Publish federation metadata;
+}
+
+partition "University of Wisconsin (Intermediary)" {
+  :Submit metadata for OP (NetID Login);
+  :Submit metadata for RPs (Canvas, O365);
+  :Receive Entity Statement from InCommon;
+  :Issue Entity Statement for RPs;
+  :Publish local metadata;
+}
+
+partition "UW NetID Login (OP)" {
+  :Expose discovery endpoint;
+  :Accept dynamic client registration;
+  :Register Canvas and Office 365;
+}
+
+partition "Relying Party (Canvas LMS / O365)" {
+  :Register with OP (NetID Login);
+  :Store client credentials;
+}
+
+partition "User Login Flow" {
+  :User initiates login at Canvas;
+  :Canvas redirects to OP /authorize;
+  :User authenticates with NetID;
+  :OP returns ID Token and Access Token;
+  :Canvas validates token;
+  :User is logged in;
+}
+
+stop
+@enduml

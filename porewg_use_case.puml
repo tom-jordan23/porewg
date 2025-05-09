@@ -1,0 +1,56 @@
+@startuml
+' Dark theme
+skinparam backgroundColor #1e1e1e
+skinparam usecase {
+  BackgroundColor #2e2e2e
+  BorderColor White
+  FontColor White
+}
+skinparam actor {
+  BackgroundColor #1e1e1e
+  BorderColor White
+  FontColor White
+}
+skinparam package {
+  BackgroundColor #1e1e1e
+  BorderColor White
+  FontColor White
+}
+skinparam ArrowColor White
+
+actor "Federation Operator\n(InCommon)" as FedOp
+actor "University IT Admin\n(UW)" as ITAdmin
+actor "UW Student" as Student
+actor "Service Provider\n(Canvas LMS / Office365)" as RP
+
+package "InCommon Federation" {
+  usecase "Issue Entity Statement" as U1
+  usecase "Issue Trust Mark" as U2
+  usecase "Publish Metadata" as U3
+}
+
+package "University of Wisconsin" {
+  usecase "Register OP\n(UW NetID Login)" as U4
+  usecase "Register RP\n(Canvas, O365)" as U5
+  usecase "Authenticate User" as U6
+}
+
+package "Campus Services" {
+  usecase "Initiate OIDC Login" as U7
+  usecase "Consume ID Token" as U8
+}
+
+FedOp --> U1
+FedOp --> U2
+FedOp --> U3
+
+ITAdmin --> U4
+ITAdmin --> U5
+
+RP --> U7
+RP --> U8
+
+Student --> U6
+U6 --> U7 : login flow
+
+@enduml
