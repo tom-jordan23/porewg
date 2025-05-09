@@ -17,6 +17,10 @@ skinparam package {
   FontColor White
 }
 skinparam ArrowColor White
+skinparam TitleFontColor White
+skinparam TitleFontSize 18
+
+title OIDC Federation for Higher Education - Use Case Diagram
 
 actor "Federation Operator\n(InCommon)" as FedOp
 actor "University IT Admin\n(UW)" as ITAdmin

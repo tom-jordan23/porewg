@@ -18,6 +18,10 @@ skinparam noteBorderColor white
 skinparam arrowColor white
 skinparam defaultTextAlignment center
 
+skinparam TitleFontColor White
+skinparam TitleFontSize 18
+title OIDC Federation for Higher Education - Component Diagram
+
 ' Federation Trust Anchors
 package "InCommon Federation Operator (US Trust Anchor)" {
   component "Entity Metadata" as Metadata_InCommon
