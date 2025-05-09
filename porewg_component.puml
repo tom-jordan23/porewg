@@ -1,0 +1,82 @@
+@startuml
+' Set dark theme
+skinparam backgroundColor #1e1e1e
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam component {
+  backgroundColor #2e2e2e
+  borderColor white
+  fontColor white
+}
+skinparam package {
+  backgroundColor #2e2e2e
+  borderColor white
+  fontColor white
+}
+skinparam noteBackgroundColor #333333
+skinparam noteBorderColor white
+skinparam arrowColor white
+skinparam defaultTextAlignment center
+
+' Federation Trust Anchors
+package "InCommon Federation Operator (US Trust Anchor)" {
+  component "Entity Metadata" as Metadata_InCommon
+  component "Trust Mark Issuer" as TMI_InCommon
+  component "Entity Statement Issuer" as ESI_InCommon
+  component "Federation Endpoints" as FE_InCommon
+  component "Constraints & Policies" as Constraints_InCommon
+}
+
+package "Other Federations" {
+  component "JISC Federation Operator" as JISC
+  component "CANARIE Federation Operator" as CANARIE
+}
+
+' Intermediary
+package "University of Wisconsin (Intermediary)" {
+  component "Entity Statement Issuer (UW)" as ESI_UW
+  component "Federation Metadata Consumer (UW)" as FMC_UW
+}
+
+' OpenID Provider
+package "UW-Madison NetID Login (OP)" {
+  component "Discovery Endpoint\n/.well-known/openid-configuration" as Discovery_OP
+  component "Authorization Endpoint\n/authorize" as Authorize_OP
+  component "Token Endpoint\n/token" as Token_OP
+  component "UserInfo Endpoint\n/userinfo" as UserInfo_OP
+  component "Dynamic Registration\n/register" as Register_OP
+}
+
+' Relying Parties
+package "Campus Services (RPs)" {
+  component "Canvas LMS (RP)" as Canvas
+  component "Office 365 (RP)" as O365
+}
+
+' Relationships - Federation Trust Chain
+ESI_InCommon --> ESI_UW : Entity Statement
+Metadata_InCommon --> FMC_UW
+TMI_InCommon --> ESI_UW : Trust Mark
+Constraints_InCommon --> FMC_UW
+
+' Federation Endpoints
+FE_InCommon --> FMC_UW : Metadata Policy\nDiscovery etc.
+
+' Trust relationships
+ESI_InCommon <-- JISC : Mutual Trust
+ESI_InCommon <-- CANARIE : Mutual Trust
+
+' Intermediary to OP
+ESI_UW --> Discovery_OP
+FMC_UW --> Discovery_OP
+
+' OP to RPs
+Authorize_OP --> Canvas : Auth Flow
+Token_OP --> Canvas
+UserInfo_OP --> Canvas
+
+Authorize_OP --> O365 : Auth Flow
+Token_OP --> O365
+UserInfo_OP --> O365
+
+@enduml

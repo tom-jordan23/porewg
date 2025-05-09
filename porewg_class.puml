@@ -1,0 +1,86 @@
+@startuml
+title OIDC Federation for Higher Education - InCommon Example
+
+' Federation Operator and Trust Anchor
+frame "InCommon Federation Operator" {
+    class InCommon {
+        + name: String
+        + manageFederation()
+    }
+    interface EntityMetadata
+    interface TrustMarks
+    interface Constraints
+    interface FederationEndpoints
+
+    InCommon ..|> EntityMetadata
+    InCommon ..|> TrustMarks
+    InCommon ..|> Constraints
+    InCommon ..|> FederationEndpoints
+
+    class FederationOperator {
+        + name: String
+        + manageTrustAnchor()
+        + recordEntityMetadata()
+    }
+    interface FederationEndpoint
+    interface AuthorityHints
+
+    FederationOperator ..|> FederationEndpoint
+    FederationOperator ..|> AuthorityHints
+    FederationOperator "1" o-- "1" InCommon : "Manages"
+}
+
+' Intermediary (University)
+package "University of Wisconsin" {
+    class UniversityOfWisconsin {
+        + name: String
+        + manageOPsAndRPs()
+    }
+    interface IntermediaryEndpoints
+    interface IntermediaryTrustMarks
+
+    UniversityOfWisconsin ..|> IntermediaryEndpoints
+    UniversityOfWisconsin ..|> IntermediaryTrustMarks
+
+    ' OP (OpenID Provider)
+    class UWNetIDLogin {
+        + name: String
+        + provideIdentity()
+    }
+    interface OPTrustMarks
+    interface OPEndpoint
+
+    UWNetIDLogin ..|> OPTrustMarks
+    UWNetIDLogin ..|> OPEndpoint
+    UniversityOfWisconsin "1" o-- "1" UWNetIDLogin : "Includes"
+
+    ' RPs (Relying Parties)
+    class CanvasLMS {
+        + name: String
+        + consumeIdentity()
+    }
+    interface RPTrustMarks_Canvas
+    interface RPEndpoint_Canvas
+
+    CanvasLMS ..|> RPTrustMarks_Canvas
+    CanvasLMS ..|> RPEndpoint_Canvas
+    UniversityOfWisconsin "1" o-- "1" CanvasLMS : "Includes"
+
+    class Office365 {
+        + name: String
+        + consumeIdentity()
+    }
+    interface RPTrustMarks_Office365
+    interface RPEndpoint_Office365
+    Office365 ..|> RPTrustMarks_Office365
+    Office365 ..|> RPEndpoint_Office365
+
+    UniversityOfWisconsin "1" o-- "1" Office365 : "Includes"
+}
+
+' Relationships
+UniversityOfWisconsin "1" ..> "1" InCommon : "Part of Trust Fabric"
+UWNetIDLogin "1" ..> "1" CanvasLMS : "Trust Path"
+UWNetIDLogin "1" ..> "1" Office365 : "Trust Path"
+
+@enduml
